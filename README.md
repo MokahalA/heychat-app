@@ -2,6 +2,6 @@
 
 Tools used:
 * React
-* JavaScript
+* HTML, CSS, JavaScript
 * Firebase Realtime Database
 * Google OAuth
