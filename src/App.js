@@ -10,6 +10,7 @@ import { useCollectionData } from 'react-firebase-hooks/firestore'
 
 import { ReactComponent as GoogleIcon } from './icons/google-icon.svg';
 
+
 firebase.initializeApp({
   //firebase config
   apiKey: "AIzaSyAFLF2kvp4DEZh1F0ma1mmfqFVO75t87Ak",
@@ -24,9 +25,9 @@ firebase.initializeApp({
 const auth = firebase.auth();
 const firestore = firebase.firestore();
 
-
 function App() {
   const [user] = useAuthState(auth);
+
   return (
     <div className="App">
       <header>
@@ -34,7 +35,7 @@ function App() {
         <SignOut />
       </header>
       <section>
-        { user ? <ChatRoom /> : <SignIn />}
+        { user ? <HomePage/> : <SignIn />}
       </section>
     </div>
   );
@@ -57,20 +58,45 @@ function SignOut(){
   )
 }
 
+function HomePage() {
+  const [selectedRoom, setSelectedRoom] = useState(null);
+  const [room, setRoom] = useState('1');
 
-function ChatRoom(){
+  const handleRoomChange = (e) => {
+    setRoom(e.target.value);
+  };
 
-  const dummy = useRef()
+  const handleEnterChat = () => {
+    setSelectedRoom(room);
+  };
 
-  const messagesRef = firestore.collection('messages');
+  return (
+    <div>
+      {selectedRoom ? (
+        <div> <ChatRoom roomNumber={selectedRoom}/></div>
+      ) : (
+        <div className="room">
+          <label class="roomLabel" htmlFor="room">Select a chat room</label>
+          <select class="box" onChange={handleRoomChange} name="room" id="room">
+            <option value="1">Room 1</option>
+            <option value="2">Room 2</option>
+            <option value="3">Room 3</option>
+          </select>
+          <button onClick={handleEnterChat}>Enter Chat</button>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function ChatRoom({ roomNumber }) {
+  const dummy = useRef();
+  const messagesRef = firestore.collection(`chatRooms/${roomNumber}/messages`);
   const query = messagesRef.orderBy('createdAt').limit(25);
+  const [messages] = useCollectionData(query, { idField: 'id' });
+  const [formValue, setFormValue] = useState('');
 
-  const [messages] = useCollectionData(query, {idField: 'id'});
-
-  const [formValue, setFormValue ] = useState('');
-
-  const sendMessage = async(e) => {
-    
+  const sendMessage = async (e) => {
     e.preventDefault();
     const { uid, photoURL } = auth.currentUser;
 
@@ -78,28 +104,30 @@ function ChatRoom(){
       text: formValue,
       createdAt: firebase.firestore.FieldValue.serverTimestamp(),
       uid,
-      photoURL
+      photoURL,
     });
 
     setFormValue('');
     dummy.current.scrollIntoView({ behavior: 'smooth' });
+  };
 
-  }
   return (
     <>
       <main>
-        {messages && messages.map(msg => <ChatMessage key={msg.id} message={msg} />)}
-        
+        <h1 className="chat-room-label">Chat Room: {roomNumber}</h1>
+        {messages && messages.map((msg) => <ChatMessage key={msg.id} message={msg} />)}
         <span ref={dummy}></span>
-
       </main>
-      
+
       <form onSubmit={sendMessage}>
-        <input value={formValue} placeholder="Send a message..." onChange={(e) => setFormValue(e.target.value)} />
+        <input
+          value={formValue}
+          placeholder="Send a message..."
+          onChange={(e) => setFormValue(e.target.value)}
+        />
         <button type="submit">🕊️</button>
       </form>
     </>
-
   );
 }
 
@@ -109,7 +137,7 @@ function ChatMessage(props){
 
   return (
     <div className={`message ${messageClass}`}>
-      <img src={photoURL} />
+      <img src={photoURL} alt="None"/>
       <p>{text}</p>
     </div>
   )

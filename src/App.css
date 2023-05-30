@@ -163,3 +163,31 @@ input::placeholder {
   opacity: 1;
 
 }
+
+.room {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.roomLabel{
+  color: #e5e5ea;
+  font-size: 1.25rem;
+  margin-bottom: 15px;
+}
+
+.box{
+  width: 120px;
+  height: 30px;
+  border: 1px solid #999;
+  font-size: 18px;
+  color: #161718;
+  background-color: #eee;
+  border-radius: 5px;
+  margin-bottom: 40px;
+}
+
+.chat-room-label{
+  color: #e5e5ea;
+  font-size: 1.5rem;
+}
