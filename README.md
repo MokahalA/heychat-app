@@ -1,6 +1,6 @@
 <div align="center">
 
-# HeyChat application
+# HeyChat
 
 ### Real-time group chat application designed for personal or work use.
 
