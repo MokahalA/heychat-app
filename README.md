@@ -23,3 +23,11 @@
 - Quick and easy user authorization using Google OAuth.
 - Select a room and start chatting with other users.
 - *Future features:* Image sharing, emojis, message reactions.
+
+### Demo
+
+<p align="center">
+  <img height="500px" src="https://github.com/MokahalA/heychat-app/blob/main/screenshots/sign-in.png">
+  <img height="500px" src="https://github.com/MokahalA/heychat-app/blob/main/screenshots/room-select.png">
+  <img height="500px" src="https://github.com/MokahalA/heychat-app/blob/main/screenshots/chat-room.png">
+</p>
